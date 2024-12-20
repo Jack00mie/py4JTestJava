@@ -1,4 +1,4 @@
-package exampel;
+package environment.domain;
 
 import org.json.JSONObject;
 

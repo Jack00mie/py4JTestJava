@@ -1,4 +1,4 @@
-package exampel;
+package environment.domain;
 
 import java.util.List;
 import java.util.Map;

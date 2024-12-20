@@ -1,4 +1,4 @@
-package exampel;
+package environment.domain;
 
 import java.util.HashMap;
 import java.util.List;

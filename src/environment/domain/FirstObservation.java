@@ -1,4 +1,4 @@
-package exampel;
+package environment.domain;
 
 import org.json.JSONObject;
 
@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-public class FirstObservation implements Serializable {
+public class FirstObservation {
     private final List<Double> observationVector;
     private final Map<String, String> info;
 
