@@ -36,7 +36,13 @@ public abstract class EnvironmentHttpHandler {
     public EnvironmentHttpHandler() {
     }
 
-    protected static JSONObject inputStreamToJson(InputStream inputStream) throws UnsupportedEncodingException, IOException {
+    protected static String invalidJson() {
+        JSONObject error = new JSONObject();
+        error.put("error:", "Invalid Json.");
+        return error.toString();
+    }
+
+    protected static String inputStreamToString(InputStream inputStream) throws IOException {
         BufferedReader streamReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
         StringBuilder responseStrBuilder = new StringBuilder();
 
@@ -44,6 +50,10 @@ public abstract class EnvironmentHttpHandler {
         while ((inputStr = streamReader.readLine()) != null)
             responseStrBuilder.append(inputStr);
 
-        return new JSONObject(responseStrBuilder.toString());
+        return responseStrBuilder.toString();
+    }
+
+    protected static JSONObject inputStreamToJson(InputStream inputStream) throws UnsupportedEncodingException, IOException {
+        return new JSONObject(inputStreamToString(inputStream));
     }
 }

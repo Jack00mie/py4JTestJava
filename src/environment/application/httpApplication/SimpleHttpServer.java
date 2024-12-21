@@ -5,6 +5,7 @@ import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpExchange;
 import environment.domain.DummyRLEnvironment;
 import environment.domain.FirstObservation;
+import environment.domain.RLEnvironment;
 import environment.domain.Transition;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,37 +23,32 @@ import java.net.http.HttpResponse;
 // Driver Class
 public class SimpleHttpServer
 {
+    private HttpServer server;
+    private HttpTest httpTest;
+    private RLEnvironment rlEnvironment;
 
-    private long startTime = 0;
-    private long finishTime = 0;
-
-    // Main Method
-    public void test() throws IOException, NullPointerException, URISyntaxException, InterruptedException {
+    public SimpleHttpServer(HttpTest httpTest, RLEnvironment rlEnvironment) throws IOException {
+        this.httpTest = httpTest;
+        this.rlEnvironment = rlEnvironment;
         // Create an HttpServer instance
-        HttpServer server = HttpServer.create(new InetSocketAddress(8094), 0);
-
-
-        DummyRLEnvironment dummyRLEnvironment = new DummyRLEnvironment(200);
+        this.server = HttpServer.create(new InetSocketAddress(8094), 0);
 
         // Create step context
-        server.createContext("/step", new stepHttpHandler(dummyRLEnvironment));
+        server.createContext("/step", new stepHttpHandler(rlEnvironment));
         // Creat reset context
-        server.createContext("/reset", new resetHttpHandler(dummyRLEnvironment));
+        server.createContext("/reset", new resetHttpHandler(rlEnvironment));
 
-        server.createContext("/testComplete", new testCompleteHttpHandler(this));
+        server.createContext("/testComplete", new testCompleteHttpHandler(httpTest));
 
         // Start the server
         server.setExecutor(null); // Use the default executor
         server.start();
         System.out.println("Server is running on port 8094");
-
-        this.startTime = System.currentTimeMillis();
-        startTest();
     }
 
     private static void startTest() throws URISyntaxException, IOException, InterruptedException {
         URI uri = new URI("http://127.0.0.1:8095/start");
-        HttpRequest request  = HttpRequest.newBuilder().uri(uri).POST(HttpRequest.BodyPublishers.noBody()).build();
+        HttpRequest request  = HttpRequest.newBuilder().uri(uri).version(HttpClient.Version.HTTP_1_1).POST(HttpRequest.BodyPublishers.noBody()).build();
 
         HttpResponse<String> response = HttpClient.newBuilder()
                 .build()
@@ -61,24 +57,19 @@ public class SimpleHttpServer
 
     }
 
-    private void testFinished() {
-        this.finishTime = System.currentTimeMillis();
-        long elapsedTime = this.finishTime - this.startTime;
-
-        System.out.println(elapsedTime + " ms" + "; " + elapsedTime/1000.0 + " s");
-
-        System.out.println("Test fished");
+    public void stopServer() {
+        server.stop(2);
     }
 
     // step http handler POST request
     static class stepHttpHandler extends EnvironmentHttpHandler implements HttpHandler {
 
-        DummyRLEnvironment dummyRLEnvironment;
+        RLEnvironment rlEnvironment;
 
-        public stepHttpHandler(DummyRLEnvironment dummyRLEnvironment) {
+        public stepHttpHandler(RLEnvironment rlEnvironment) {
             super();
 
-            this.dummyRLEnvironment = dummyRLEnvironment;
+            this.rlEnvironment = rlEnvironment;
         }
 
         private String invalidFieldsResponse() {
@@ -88,12 +79,6 @@ public class SimpleHttpServer
             fields.put("action", "Integer required. Describes action to take.");
             error.put("details", fields);
 
-            return error.toString();
-        }
-
-        private String invalidJson() {
-            JSONObject error = new JSONObject();
-            error.put("error:", "Invalid Json.");
             return error.toString();
         }
 
@@ -115,7 +100,7 @@ public class SimpleHttpServer
                             int action = requestBody.getInt("action");
 
                             // step in environment
-                            Transition transition = this.dummyRLEnvironment.step(action);
+                            Transition transition = this.rlEnvironment.step(action);
 
                             // creat responds
                             response = transition.toJson().toString();
@@ -150,11 +135,11 @@ public class SimpleHttpServer
     // reset http handler
     static class resetHttpHandler extends EnvironmentHttpHandler implements HttpHandler {
 
-        DummyRLEnvironment dummyRLEnvironment;
+        RLEnvironment rlEnvironment;
 
-        public resetHttpHandler(DummyRLEnvironment dummyRLEnvironment) {
+        public resetHttpHandler(RLEnvironment rlEnvironment) {
             super();
-            this.dummyRLEnvironment = dummyRLEnvironment;
+            this.rlEnvironment = rlEnvironment;
         }
         @Override
         public void handle(HttpExchange exchange) throws IOException
@@ -164,7 +149,7 @@ public class SimpleHttpServer
             switch (requestMethod) {
                 case METHOD_POST:
                     // reset environment
-                    FirstObservation firstObservation = this.dummyRLEnvironment.reset();
+                    FirstObservation firstObservation = this.rlEnvironment.reset();
 
                     // creat responds
                     String response = firstObservation.toJson().toString();
@@ -187,10 +172,10 @@ public class SimpleHttpServer
     }
 
     static class testCompleteHttpHandler extends EnvironmentHttpHandler implements HttpHandler {
-            SimpleHttpServer simpleHttpServer;
-        public testCompleteHttpHandler(SimpleHttpServer simpleHttpServer) {
+            HttpTest httpTest;
+        public testCompleteHttpHandler(HttpTest httpTest) {
             super();
-            this.simpleHttpServer = simpleHttpServer;
+            this.httpTest = httpTest;
         }
         @Override
         public void handle(HttpExchange exchange) throws IOException
@@ -199,8 +184,22 @@ public class SimpleHttpServer
             final String requestMethod = exchange.getRequestMethod().toUpperCase();
             switch (requestMethod) {
                 case METHOD_POST:
-                    this.simpleHttpServer.testFinished();
-                    exchange.sendResponseHeaders(NO_CONTENT, NO_RESPONSE_LENGTH);
+                    try {
+                        // get request body
+                        String requestBody = inputStreamToString(exchange.getRequestBody());
+                        exchange.sendResponseHeaders(NO_CONTENT, NO_RESPONSE_LENGTH);
+                        this.httpTest.testFinished(requestBody);
+                    }
+                    catch (IOException exception) {
+                        final byte[] rawResponseBody = invalidJson().getBytes(CHARSET);
+
+                        headers.set(HEADER_CONTENT_TYPE, String.format("application/json; charset=%s", CHARSET));
+                        exchange.sendResponseHeaders(BAD_REQUEST, rawResponseBody.length);
+
+                        OutputStream outputStream = exchange.getResponseBody();
+                        outputStream.write(rawResponseBody);
+                        outputStream.close();
+                    }
                 case METHOD_OPTIONS:
                     headers.set(HEADER_ALLOW, METHOD_POST);
                     exchange.sendResponseHeaders(STATUS_OK, NO_RESPONSE_LENGTH);
