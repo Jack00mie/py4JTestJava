@@ -1,9 +1,9 @@
 package environment.application.httpApplication;
+
 import com.sun.net.httpserver.Headers;
-import com.sun.net.httpserver.HttpServer;
-import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpExchange;
-import environment.domain.DummyRLEnvironment;
+import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.HttpServer;
 import environment.domain.FirstObservation;
 import environment.domain.RLEnvironment;
 import environment.domain.Transition;

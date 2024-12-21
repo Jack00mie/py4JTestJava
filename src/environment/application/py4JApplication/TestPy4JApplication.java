@@ -3,9 +3,6 @@ package environment.application.py4JApplication;
 import py4j.GatewayServer;
 import utils.Writer;
 
-import java.io.FileWriter;
-import java.io.IOException;
-
 public class TestPy4JApplication {
 
     public static void main(String[] args) {

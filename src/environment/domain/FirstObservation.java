@@ -2,7 +2,6 @@ package environment.domain;
 
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 

@@ -6,7 +6,7 @@ import java.io.IOException;
 public class Writer {
     public static <A> void store(A toStore, String fileName) {
         try (FileWriter writer = new FileWriter(fileName, true)) {
-            writer.write(String.valueOf(toStore) + ", ");
+            writer.write(String.valueOf(toStore) + "\n");
         } catch (IOException e) {
             e.printStackTrace();
         }

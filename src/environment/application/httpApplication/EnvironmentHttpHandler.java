@@ -3,14 +3,8 @@ package environment.application.httpApplication;
 import org.json.JSONObject;
 
 import java.io.*;
-import java.net.URI;
-import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
 public abstract class EnvironmentHttpHandler {
     protected static final String HOSTNAME = "localhost";
