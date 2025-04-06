@@ -7,7 +7,7 @@ $pythonRootDir = "C:\Users\leonp\PycharmProjects\py4jTets"
 $observationVectorSize = "200"
 
 # Activate venv
-."C:\Users\leonp\PycharmProjects\py4jTets\.venv\Scripts\activate.ps1"
+."$($pythonRootDir)\.venv\Scripts\activate.ps1"
 
 for ($i = 0; $i -lt 20; $i++) {
     Write-Host "$($i). test round"
