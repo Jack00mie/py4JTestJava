@@ -1,7 +1,13 @@
 ﻿Write-Host "Begin testing..."
 
+# Root dir of the java and python app
+$javaRootDir = "C:\Users\leonp\IdeaProjects\py4jTest"
+$pythonRootDir = "C:\Users\leonp\PycharmProjects\py4jTets"
+# The size of the observationVector you want to test with. More means more data being send.
+$observationVectorSize = "200"
+
 # Activate venv
-."C:\Users\Leon Püschel\PycharmProjects\py4jTest\.venv\Scripts\activate.ps1"
+."C:\Users\leonp\PycharmProjects\py4jTets\.venv\Scripts\activate.ps1"
 
 for ($i = 0; $i -lt 20; $i++) {
     Write-Host "$($i). test round"
@@ -24,14 +30,14 @@ for ($i = 0; $i -lt 20; $i++) {
 
     # Start Python process and capture its process object
     $pythonProcess = Start-Process -FilePath python `
-        -ArgumentList "`"C:\Users\Leon Püschel\PycharmProjects\py4jTest$($pythonDir)`"", "200" `
+        -ArgumentList "`"$($pythonRootDir)$($pythonDir)`"", "$($observationVectorSize)" `
         -PassThru
 
     Start-Sleep -Seconds 5
 
     # Start Java process and capture its process object
     $javaProcess = Start-Process -FilePath java `
-        -ArgumentList "-jar", "`"C:\Users\Leon Püschel\IdeaProjects\py4JTestJava$($javaDir)`"", "200" `
+        -ArgumentList "-jar", "`"$($javaRootDir)$($javaDir)`"", "$($observationVectorSize)" `
         -PassThru
    
     Start-Sleep -Seconds 1.5
