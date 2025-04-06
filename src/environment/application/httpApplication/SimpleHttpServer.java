@@ -13,11 +13,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 
 
 // Driver Class
@@ -44,17 +39,6 @@ public class SimpleHttpServer
         server.setExecutor(null); // Use the default executor
         server.start();
         System.out.println("Server is running on port 8094");
-    }
-
-    private static void startTest() throws URISyntaxException, IOException, InterruptedException {
-        URI uri = new URI("http://127.0.0.1:8095/start");
-        HttpRequest request  = HttpRequest.newBuilder().uri(uri).version(HttpClient.Version.HTTP_1_1).POST(HttpRequest.BodyPublishers.noBody()).build();
-
-        HttpResponse<String> response = HttpClient.newBuilder()
-                .build()
-                .send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println(response.body());
-
     }
 
     public void stopServer() {

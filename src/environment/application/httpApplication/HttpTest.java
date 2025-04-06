@@ -32,6 +32,7 @@ public class HttpTest {
         JSONObject requestBody = new JSONObject();
         requestBody.put("observationVectorSize", observationVectorSize);
 
+        // build http request
         HttpRequest request  = HttpRequest.newBuilder()
                 .uri(uri)
                 .headers("Content-Type", "application/json; charset=UTF-8")
@@ -39,6 +40,7 @@ public class HttpTest {
                 .POST(HttpRequest.BodyPublishers.ofString(requestBody.toString()))
                 .build();
 
+        // send http request
         HttpResponse<String> response = HttpClient.newBuilder()
                 .build()
                 .send(request, HttpResponse.BodyHandlers.ofString());

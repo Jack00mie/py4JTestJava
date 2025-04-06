@@ -1,7 +1,7 @@
-Write-Host "Begin testing..."
+ï»¿Write-Host "Begin testing..."
 
 # Activate venv
-."C:\Users\Leon Püschel\PycharmProjects\py4jTest\.venv\Scripts\activate.ps1"
+."C:\Users\Leon PÃ¼schel\PycharmProjects\py4jTest\.venv\Scripts\activate.ps1"
 
 for ($i = 0; $i -lt 20; $i++) {
     Write-Host "$($i). test round"
@@ -24,14 +24,14 @@ for ($i = 0; $i -lt 20; $i++) {
 
     # Start Python process and capture its process object
     $pythonProcess = Start-Process -FilePath python `
-        -ArgumentList "`"C:\Users\Leon Püschel\PycharmProjects\py4jTest$($pythonDir)`"", "200" `
+        -ArgumentList "`"C:\Users\Leon PÃ¼schel\PycharmProjects\py4jTest$($pythonDir)`"", "200" `
         -PassThru
 
     Start-Sleep -Seconds 5
 
     # Start Java process and capture its process object
     $javaProcess = Start-Process -FilePath java `
-        -ArgumentList "-jar", "`"C:\Users\Leon Püschel\IdeaProjects\py4JTestJava$($javaDir)`"", "200" `
+        -ArgumentList "-jar", "`"C:\Users\Leon PÃ¼schel\IdeaProjects\py4JTestJava$($javaDir)`"", "200" `
         -PassThru
    
     Start-Sleep -Seconds 1.5
