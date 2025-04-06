@@ -13,7 +13,7 @@ for ($i = 0; $i -lt 20; $i++) {
         # Http test
         Write-Host "Http test round..."
         $pythonDir = "\httpTest\httpEnvironment.py"
-        $javaDir = "\out\artifacts\httpTestJava_jar\py4JTestJava.jar"
+        $javaDir = "\out\artifacts\httpTestJava_jar\httpTestJava.jar"
 
     } else {
         # py4J test
