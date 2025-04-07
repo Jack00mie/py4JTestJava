@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface RLEnvironment {
-    public List<Double> getObservation();
+    public List<Integer> getObservation();
     public double getReward();
     public boolean terminated();
     public boolean truncated();

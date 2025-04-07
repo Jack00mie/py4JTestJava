@@ -13,7 +13,6 @@ public class TestPy4JApplication {
 
         Py4JTest py4JTest = (Py4JTest) server.getPythonServerEntryPoint(new Class[] { Py4JTest.class });
 
-        if(args[0] == null) args[0] = "100";
         System.out.println("observationVectorSize: " + args[0]);
         try {
             long startTime = System.currentTimeMillis();

@@ -105,9 +105,11 @@ public class SimpleHttpServer
                     OutputStream outputStream = exchange.getResponseBody();
                     outputStream.write(rawResponseBody);
                     outputStream.close();
+                    break;
                 case METHOD_OPTIONS:
                     headers.set(HEADER_ALLOW, METHOD_POST);
                     exchange.sendResponseHeaders(STATUS_OK, NO_RESPONSE_LENGTH);
+                    break;
                 default:
                     headers.set(HEADER_ALLOW, METHOD_POST);
                     exchange.sendResponseHeaders(STATUS_METHOD_NOT_ALLOWED, NO_RESPONSE_LENGTH);
@@ -144,9 +146,11 @@ public class SimpleHttpServer
                     OutputStream outputStream = exchange.getResponseBody();
                     outputStream.write(rawResponseBody);
                     outputStream.close();
+                    break;
                 case METHOD_OPTIONS:
                     headers.set(HEADER_ALLOW, METHOD_POST);
                     exchange.sendResponseHeaders(STATUS_OK, NO_RESPONSE_LENGTH);
+                    break;
                 default:
                     headers.set(HEADER_ALLOW, METHOD_POST);
                     exchange.sendResponseHeaders(STATUS_METHOD_NOT_ALLOWED, NO_RESPONSE_LENGTH);
@@ -184,9 +188,11 @@ public class SimpleHttpServer
                         outputStream.write(rawResponseBody);
                         outputStream.close();
                     }
+                    break;
                 case METHOD_OPTIONS:
                     headers.set(HEADER_ALLOW, METHOD_POST);
                     exchange.sendResponseHeaders(STATUS_OK, NO_RESPONSE_LENGTH);
+                    break;
                 default:
                     headers.set(HEADER_ALLOW, METHOD_POST);
                     exchange.sendResponseHeaders(STATUS_METHOD_NOT_ALLOWED, NO_RESPONSE_LENGTH);
