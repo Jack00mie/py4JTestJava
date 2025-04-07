@@ -2,9 +2,11 @@
 
 # Root dir of the java and python app
 $javaRootDir = "C:\Users\leonp\IdeaProjects\py4jTest"
-$pythonRootDir = "C:\Users\leonp\PycharmProjects\py4jTets"
+$pythonRootDir = "C:\Users\leonp\PycharmProjects\py4jTest"
 # The size of the observationVector you want to test with. More means more data being send.
 $observationVectorSize = "200"
+# increase for slower Systems
+$waitTimeFactor = 1
 
 # Activate venv
 ."$($pythonRootDir)\.venv\Scripts\activate.ps1"
@@ -33,7 +35,7 @@ for ($i = 0; $i -lt 20; $i++) {
         -ArgumentList "`"$($pythonRootDir)$($pythonDir)`"", "$($observationVectorSize)" `
         -PassThru
 
-    Start-Sleep -Seconds 5
+    Start-Sleep -Seconds (5 * $waitTimeFactor)
 
     # Start Java process and capture its process object
     $javaProcess = Start-Process -FilePath java `
@@ -45,7 +47,7 @@ for ($i = 0; $i -lt 20; $i++) {
     # Wait until both processes are no longer running
     Wait-Process -Id $pythonProcess.Id, $javaProcess.Id
 
-    Start-Sleep -Seconds 1.5
+    Start-Sleep -Seconds (1.5 * $waitTimeFactor)
 }
 
 
