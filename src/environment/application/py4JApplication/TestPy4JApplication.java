@@ -23,7 +23,7 @@ public class TestPy4JApplication {
             long elapsedTime = finishTime - startTime;
 
             System.out.println(elapsedTime + " ms" + "; " + elapsedTime/1000.0 + " s");
-            Writer.store(elapsedTime, "Py4JTestResults" + args[0] + ".txt");
+            Writer.store(elapsedTime, "Py4JTestResultsContinues" + args[0] + ".txt");
 
             System.out.println(massage);
         } catch (Exception e) {

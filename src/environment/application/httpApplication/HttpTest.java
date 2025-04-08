@@ -52,7 +52,7 @@ public class HttpTest {
         long elapsedTime = this.finishTime - this.startTime;
 
         System.out.println(elapsedTime + " ms" + "; " + elapsedTime/1000.0 + " s");
-        Writer.store(elapsedTime, "HttpTestResults" + observationVectorSize + ".txt");
+        Writer.store(elapsedTime, "HttpTestResultsContinues" + observationVectorSize + ".txt");
         System.out.println(massage);
         simpleHttpServer.stopServer();
 
