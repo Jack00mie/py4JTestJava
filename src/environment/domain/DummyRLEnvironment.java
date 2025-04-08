@@ -17,7 +17,7 @@ public class DummyRLEnvironment implements RLEnvironment {
 
     @Override
     public List<Integer> getObservation() {
-        List<Integer> observationVector = random.ints(observationVectorSize, 0, 100).boxed().toList();
+        List<Integer> observationVector = random.ints(observationVectorSize, 0, 3).boxed().toList();
         return observationVector;
     }
 
