@@ -14,6 +14,7 @@ import java.net.http.HttpResponse;
 
 public class HttpTest {
     private SimpleHttpServer simpleHttpServer;
+    private HttpClient httpClient;
 
     private long startTime = 0;
     private long finishTime = 0;
@@ -23,6 +24,9 @@ public class HttpTest {
         RLEnvironment rlEnvironment = new DummyRLEnvironment(observationVectorSize);
         this.simpleHttpServer = new SimpleHttpServer(this, rlEnvironment);
         this.observationVectorSize = observationVectorSize;
+        this.httpClient = HttpClient.newBuilder()
+                .version(HttpClient.Version.HTTP_1_1)
+                .build();
     }
 
     public void startTest() throws IOException, InterruptedException, URISyntaxException {
@@ -41,9 +45,7 @@ public class HttpTest {
                 .build();
 
         // send http request
-        HttpResponse<String> response = HttpClient.newBuilder()
-                .build()
-                .send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = this.httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         System.out.println(response.body());
     }
 
